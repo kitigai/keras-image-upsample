@@ -5,8 +5,6 @@ from scipy.misc import imsave, imread, imresize
 from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
 from scipy.ndimage.filters import gaussian_filter
 
-from keras import backend as K
-
 import os
 import time
 
@@ -38,6 +36,7 @@ validation_output_path = base_dataset_dir + r"train_images/validation/"
 
 if not os.path.exists(output_path):
     os.makedirs(output_path)
+
 
 def transform_images(directory, output_directory, scaling_factor=2, max_nb_images=-1, true_upscale=False):
     index = 1
@@ -148,8 +147,10 @@ def combine_patches(in_patches, out_shape, scale):
     recon = reconstruct_from_patches_2d(in_patches, out_shape)
     return recon
 
+
 def image_generator(directory, scale_factor=2, target_shape=None, channels=3, small_train_images=False, shuffle=True,
                     batch_size=32, seed=None):
+    from keras import backend as K
     if not target_shape:
         if small_train_images:
             if K.image_dim_ordering() == "th":
