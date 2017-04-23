@@ -1,6 +1,7 @@
 from __future__ import print_function, division
 
 from keras.utils.visualize_util import plot
+
 import models
 import img_utils
 
@@ -36,9 +37,10 @@ if __name__ == "__main__":
     Train Super Resolution
     """
 
-    # sr = models.ImageSuperResolutionModel(scale)
-    # sr.create_model()
-    # sr.fit(nb_epochs=250)
+    sr = models.ImageSuperResolutionModel(scale)
+    sr.create_model()
+    sr.fit(nb_epochs=250)
+
 
     """
     Train ExpantionSuperResolution
@@ -84,16 +86,16 @@ if __name__ == "__main__":
     Train GAN Super Resolution
     """
 
-    gsr = models.GANImageSuperResolutionModel(scale)
-    gsr.create_model(mode='train')
-    gsr.fit(nb_pretrain_samples=10000, nb_epochs=10)
+    # gsr = models.GANImageSuperResolutionModel(scale)
+    # gsr.create_model(mode='train')
+    # gsr.fit(nb_pretrain_samples=10000, nb_epochs=10)
 
     """
     Evaluate Super Resolution on Set5/14
     """
 
-    # sr = models.ImageSuperResolutionModel(scale)
-    # sr.evaluate(val_path)
+    sr = models.ImageSuperResolutionModel(scale)
+    sr.evaluate(val_path)
 
     """
     Evaluate ESRCNN on Set5/14

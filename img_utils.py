@@ -31,7 +31,7 @@ validation_path = r"val_images/"
 validation_set5_path = validation_path + "set5/"
 validation_set14_path = validation_path + "set14/"
 
-base_dataset_dir = os.path.expanduser("~") + "/Image Super Resolution Dataset/"
+base_dataset_dir = os.path.expanduser("~") + "/datasets/keras-image-upsample/"
 
 output_path = base_dataset_dir + "train_images/train/"
 validation_output_path = base_dataset_dir + r"train_images/validation/"

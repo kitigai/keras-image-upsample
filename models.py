@@ -59,7 +59,7 @@ class BaseSuperResolutionModel(object):
         self.evaluation_func = None
         self.uses_learning_phase = False
 
-    def create_model(self, height=32, width=32, channels=3, load_weights=False, batch_size=128) -> Model:
+    def create_model(self, height=32, width=32, channels=3, load_weights=False, batch_size=128):
         """
         Subclass dependent implementation.
         """
@@ -76,7 +76,7 @@ class BaseSuperResolutionModel(object):
 
         return init
 
-    def fit(self, batch_size=128, nb_epochs=100, save_history=True, history_fn="Model History.txt") -> Model:
+    def fit(self, batch_size=128, nb_epochs=100, save_history=True, history_fn="Model History.txt"):
         """
         Standard method to train any of the models.
         """
@@ -248,7 +248,7 @@ class BaseSuperResolutionModel(object):
         return img_height, img_width
 
 
-def _evaluate(sr_model : BaseSuperResolutionModel, validation_dir, scale_pred=False):
+def _evaluate(sr_model, validation_dir, scale_pred=False):
     """
         Evaluates the model on the Validation images
         """
@@ -353,7 +353,7 @@ def _evaluate(sr_model : BaseSuperResolutionModel, validation_dir, scale_pred=Fa
         print("Average PRNS value of validation images = %00.4f \n" % (total_psnr / nb_images))
 
 
-def _evaluate_denoise(sr_model : BaseSuperResolutionModel, validation_dir, scale_pred=False):
+def _evaluate_denoise(sr_model, validation_dir, scale_pred=False):
     print("Validating %s model" % sr_model.model_name)
     predict_path = "val_predict/"
     if not os.path.exists(predict_path):
