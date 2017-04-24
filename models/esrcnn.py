@@ -21,11 +21,12 @@ class ExpantionSuperResolution(BaseSuperResolutionModel):
         self.n1 = 64
         self.n2 = 32
 
-    def create_model(self, height=32, width=32, channels=3, load_weights=False):
+    def create_model(self, height=None, width=None, load_weights=False):
         """
             Creates a model to be used to scale images of specific height and width.
         """
-        init = super(ExpantionSuperResolution, self).create_model(height, width, channels, load_weights)
+        height, width = self.get_hw(height=height, width=width)
+        init = super(ExpantionSuperResolution, self).create_model(height=height, width=width, load_weights=load_weights)
 
         x = Convolution2D(self.n1, self.f1, self.f1, activation='relu', border_mode='same', name='level1')(init)
 
@@ -35,7 +36,7 @@ class ExpantionSuperResolution(BaseSuperResolutionModel):
 
         x = merge([x1, x2, x3], mode='ave')
 
-        out = Convolution2D(channels, self.f3, self.f3, activation='relu', border_mode='same', name='output')(x)
+        out = Convolution2D(self.channels, self.f3, self.f3, activation='relu', border_mode='same', name='output')(x)
 
         model = Model(init, out)
         adam = optimizers.Adam(lr=1e-3)

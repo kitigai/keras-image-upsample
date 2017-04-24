@@ -20,16 +20,18 @@ class ImageSuperResolutionModel(BaseSuperResolutionModel):
         self.n1 = 64
         self.n2 = 32
 
-    def create_model(self, load_weights=False):
+    def create_model(self, height=None, width=None, load_weights=False):
         """
             Creates a model to be used to scale images of specific height and width.
         """
-        init = super(ImageSuperResolutionModel, self).create_model(load_weights=load_weights)
+        height, width = self.get_hw(height=height, width=width)
+        init = super(ImageSuperResolutionModel, self).create_model(
+            height=height, width=width, load_weights=load_weights)
 
         x = Convolution2D(self.n1, self.f1, self.f1, activation='relu', border_mode='same', name='level1')(init)
         x = Convolution2D(self.n2, self.f2, self.f2, activation='relu', border_mode='same', name='level2')(x)
-        channels = 3
-        out = Convolution2D(channels, self.f3, self.f3, border_mode='same', name='output')(x)
+
+        out = Convolution2D(self.channels, self.f3, self.f3, border_mode='same', name='output')(x)
 
         model = Model(init, out)
 

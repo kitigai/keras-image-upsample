@@ -18,6 +18,7 @@ import img_utils
 
 
 class BaseSuperResolutionModel(object):
+    channels = 3
 
     def __init__(self, model_name, scale_factor):
         """
@@ -35,7 +36,12 @@ class BaseSuperResolutionModel(object):
         self.evaluation_func = None
         self.uses_learning_phase = False
 
-    def create_model(self, load_weights=False):
+    def get_hw(self, height, width):
+        height = 16 * self.scale_factor if height is None else height
+        width = 16 * self.scale_factor if width is None else width
+        return height, width
+
+    def create_model(self, height, width, load_weights=False):
         """
         Subclass dependent implementation.
         """
@@ -45,14 +51,12 @@ class BaseSuperResolutionModel(object):
         #
         np.random.seed(2727)
 
-        height = 16 * self.scale_factor
-        width = 16 * self.scale_factor
-        channels = 3
+
 
         if K.image_dim_ordering() == "th":
-            shape = (channels, width, height)
+            shape = (self.channels, width, height)
         else:
-            shape = (width, height, channels)
+            shape = (width, height, self.channels)
 
         init = Input(shape=shape)
 

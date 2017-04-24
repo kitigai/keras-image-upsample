@@ -7,7 +7,7 @@ if __name__ == "__main__":
     # Transform the images once, then run the main code to scale images
 
     # Change scaling factor to increase the scaling factor
-    scale_factor = 2
+    scale_factor = 8
 
     # Set true_upscale to True to generate smaller training images that will then be true upscaled.
     # Leave as false to create same size input and output images
