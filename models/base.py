@@ -80,7 +80,7 @@ class BaseSuperResolutionModel(object):
 
         print("Training model : {}".format(self.model_name))
 
-        self.model.fit_generator(
+        history = self.model.fit_generator(
             generator=train_dataset.generator(shuffle=True),
             nb_epoch=nb_epochs,
             callbacks=callback_list,
@@ -90,7 +90,7 @@ class BaseSuperResolutionModel(object):
             verbose=verbose
         )
 
-        return self.model
+        return history
 
     # def evaluate(self, validation_dir):
     #     if self.type_requires_divisible_shape:

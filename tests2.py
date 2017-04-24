@@ -38,12 +38,12 @@ if __name__ == "__main__":
     Train Super Resolution
     """
 
-    train_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-train-tf")
-    validation_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-validation-tf")
+    train_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-train_small-tf")
+    validation_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-validation_small-tf")
 
-    sr = models.ImageSuperResolutionModel(scale)
+    sr = models.ImageSuperResolutionModelDropout(scale)
     sr.create_model()
-    sr.fit(nb_epochs=250, train_dataset=train_dataset, validation_dataset=validation_dataset, verbose=1)
+    sr.fit(nb_epochs=5, train_dataset=train_dataset, validation_dataset=validation_dataset, verbose=1)
 
 
     """

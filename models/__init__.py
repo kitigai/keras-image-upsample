@@ -1,3 +1,3 @@
 # coding=utf-8
 from __future__ import absolute_import
-from .srcnn import ImageSuperResolutionModel
+from .srcnn import ImageSuperResolutionModel, ImageSuperResolutionModelDropout

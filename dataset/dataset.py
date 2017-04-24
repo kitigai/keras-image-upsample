@@ -25,7 +25,7 @@ class Batch(object):
     def save(self, path):
         assert len(self.x) == len(self.y)
         print("Save batch with size {}: {}".format(self.size, path))
-        np.savez(path, x=self.x, y=self.y)
+        np.savez_compressed(path, x=self.x, y=self.y)
 
     def load(self, path):
         npz_file = np.load(path + ".npz")
