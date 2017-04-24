@@ -1,7 +1,7 @@
 from __future__ import print_function, division
 
 from keras.models import Model
-from keras.layers import merge, Input, Dense, Flatten, BatchNormalization, Activation, LeakyReLU
+from keras.layers import merge, Input, Dense, Flatten, BatchNormalization, Activation, LeakyReLU, Dropout
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, UpSampling2D
 from keras import backend as K
 from keras.utils.np_utils import to_categorical
@@ -470,11 +470,17 @@ class ImageSuperResolutionModel(BaseSuperResolutionModel):
         """
             Creates a model to be used to scale images of specific height and width.
         """
+        np.random.random(2727)
         init = super(ImageSuperResolutionModel, self).create_model(height, width, channels, load_weights, batch_size)
 
         x = Convolution2D(self.n1, self.f1, self.f1, activation='relu', border_mode='same', name='level1')(init)
+        # x = Convolution2D(self.n1, self.f1, self.f1, border_mode='same', name='level1')(init)
+        # x = LeakyReLU()(x)
+        # x = Dropout(0.25)(x)
         x = Convolution2D(self.n2, self.f2, self.f2, activation='relu', border_mode='same', name='level2')(x)
-
+        # x = Convolution2D(self.n2, self.f2, self.f2, border_mode='same', name='level2')(x)
+        # x = LeakyReLU()(x)
+        # x = Dropout(0.25)(x)
         out = Convolution2D(channels, self.f3, self.f3, border_mode='same', name='output')(x)
 
         model = Model(init, out)

@@ -37,18 +37,18 @@ if __name__ == "__main__":
     Train Super Resolution
     """
 
-    # sr = models.ImageSuperResolutionModel(scale)
-    # sr.create_model()
-    # sr.fit(nb_epochs=250)
+#    sr = models.ImageSuperResolutionModel(scale)
+#    sr.create_model()
+#    sr.fit(nb_epochs=500)
 
 
     """
     Train ExpantionSuperResolution
     """
 
-    # esr = models.ExpantionSuperResolution(scale)
-    # esr.create_model()
-    # esr.fit(nb_epochs=250)
+    esr = models.ExpantionSuperResolution(scale)
+    esr.create_model()
+    esr.fit(nb_epochs=250)
 
     """
     Train DenoisingAutoEncoderSR
@@ -86,9 +86,9 @@ if __name__ == "__main__":
     Train GAN Super Resolution
     """
 
-    gsr = models.GANImageSuperResolutionModel(scale)
-    gsr.create_model(mode='train')
-    gsr.fit(nb_pretrain_samples=10000, nb_epochs=10)
+    # gsr = models.GANImageSuperResolutionModel(scale)
+    # gsr.create_model(mode='train')
+    # gsr.fit(nb_pretrain_samples=10000, nb_epochs=10)
 
     """
     Evaluate Super Resolution on Set5/14
@@ -138,8 +138,8 @@ if __name__ == "__main__":
     Evaluate GAN Super Resolution on Set 5/14
     """
 
-    gsr = models.GANImageSuperResolutionModel(scale)
-    gsr.evaluate(val_path)
+    # gsr = models.GANImageSuperResolutionModel(scale)
+    # gsr.evaluate(val_path)
 
     """
     Compare output images of sr, esr, dsr and ddsr models
