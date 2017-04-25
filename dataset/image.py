@@ -120,7 +120,7 @@ class ImageScaleDataSet(DataSet):
     def scale_factor(self):
         return self.config['scale_factor']
 
-    def create_ex(self, name, output_dir, source_dir, batch_size, scale_factor,
+    def create_ex(self, name, output_dir, source_dir, scale_factor,
                   true_upscale, image_dim_ordering=K.image_dim_ordering()):
         patch_size = 16 * scale_factor
         name = "image-x{scale}-patch{patch}-{name}-{image_dim_ordering}".format(
@@ -132,4 +132,4 @@ class ImageScaleDataSet(DataSet):
         self.config['image_dim_ordering'] = image_dim_ordering
 
         super(ImageScaleDataSet, self).create(
-            name=name, output_dir=output_dir, source_dir=source_dir, batch_size=batch_size)
+            name=name, output_dir=output_dir, source_dir=source_dir, batch_size=512)

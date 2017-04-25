@@ -13,21 +13,21 @@ if __name__ == "__main__":
     # Leave as false to create same size input and output images
     true_upscale = False
 
-    batch_size = 2048 / scale_factor
-
-    # ImageScaleDataSet().create_ex(
-    #     name="train_small", output_dir="~/datasets", batch_size=batch_size, source_dir="input_images_lrres",
-    #     scale_factor=scale_factor, true_upscale=true_upscale)
+    # batch_size = 2048 #2048 / scale_factor
 
     ImageScaleDataSet().create_ex(
-        name="train_grid", output_dir="~/datasets", batch_size=batch_size, source_dir="grid_search_lrres",
+        name="train_small", output_dir="~/datasets", source_dir="input_images_lrres",
         scale_factor=scale_factor, true_upscale=true_upscale)
+
+    # ImageScaleDataSet().create_ex(
+    #     name="train_grid", output_dir="~/datasets", source_dir="grid_search_lrres",
+    #     scale_factor=scale_factor, true_upscale=true_upscale)
 
 
     # ImageScaleDataSet().create_ex(
-    #     name="train_lrres", output_dir="~/datasets", batch_size=batch_size, source_dir="input_images_hires",
+    #     name="train_lrres", output_dir="~/datasets", source_dir="input_images_hires",
     #     scale_factor=scale_factor, true_upscale=true_upscale)
 
     # ImageScaleDataSet().create_ex(
-    #     name="validation_small", output_dir="~/datasets", batch_size=batch_size, source_dir="val_images/set5",
+    #     name="validation_small", output_dir="~/datasets", source_dir="val_images/set5",
     #     scale_factor=scale_factor, true_upscale=true_upscale)

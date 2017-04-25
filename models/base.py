@@ -62,15 +62,15 @@ class BaseSuperResolutionModel(object):
 
         return init
 
-    def fit(self, train_dataset, validation_dataset, nb_epochs, verbose):
+    def fit(self, train_dataset, validation_dataset, nb_epochs, verbose, batch_size):
         """
         Standard method to train any of the models.
         """
 
         history_fn = "{}-x{}-history.json".format(self.model_name, self.scale_factor)
 
-        if self.model is None:
-            self.create_model()
+        # if self.model is None:
+        #     self.create_model()
 
         callback_list = [
             callbacks.ModelCheckpoint(self.weight_path, monitor='val_PSNRLoss', save_best_only=True,
@@ -81,11 +81,11 @@ class BaseSuperResolutionModel(object):
         print("Training model : {}".format(self.model_name))
 
         history = self.model.fit_generator(
-            generator=train_dataset.generator(shuffle=True),
+            generator=train_dataset.generator(shuffle=True, batch_size=batch_size),
             nb_epoch=nb_epochs,
             callbacks=callback_list,
             samples_per_epoch=train_dataset.samples_count,
-            validation_data=validation_dataset.generator(shuffle=True),
+            validation_data=validation_dataset.generator(shuffle=True, batch_size=batch_size),
             nb_val_samples=validation_dataset.samples_count,
             verbose=verbose
         )

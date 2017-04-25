@@ -10,15 +10,18 @@ from objectives import PSNRLoss
 
 class ImageSuperResolutionModel(BaseSuperResolutionModel):
 
-    def __init__(self, scale_factor, f1=9, f2=1, f3=5):
+    def __init__(self, scale_factor, f1=9, f2=1, f3=5, n1=64, n2=32, optimizer=Adam, lr=1e-3, loss=mean_squared_logarithmic_error):
         super(ImageSuperResolutionModel, self).__init__("srcnn", scale_factor)
 
         self.f1 = f1
         self.f2 = f2
         self.f3 = f3
 
-        self.n1 = 64
-        self.n2 = 32
+        self.n1 = n1
+        self.n2 = n2
+        self.optimizer = optimizer
+        self.lr = lr
+        self.loss = loss
 
     def create_model(self, height=None, width=None, load_weights=False):
         """
@@ -35,9 +38,7 @@ class ImageSuperResolutionModel(BaseSuperResolutionModel):
 
         model = Model(init, out)
 
-        adam = Adam(lr=1e-3)
-
-        model.compile(optimizer=RMSprop(lr=1e-3), loss=mean_squared_logarithmic_error, metrics=[PSNRLoss])
+        model.compile(optimizer=self.optimizer(lr=self.lr), loss=self.loss, metrics=[PSNRLoss])
         if load_weights:
             model.load_weights(self.weight_path)
 

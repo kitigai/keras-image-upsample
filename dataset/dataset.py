@@ -37,6 +37,13 @@ class Batch(object):
     def get(self, num):
         return self.x[num], self.y[num]
 
+    def split(self, batch_size):
+        assert self.size % batch_size == 0
+        for i in range(0, self.size, batch_size):
+            y = self.y[i: i + batch_size]
+            x = self.x[i: i + batch_size]
+            yield x, y
+
 
 class SamplesGenerator(object):
 
@@ -82,16 +89,14 @@ class DataSet(object):
         )
         return batch
 
-    def generator(self, shuffle):
+    def generator(self, shuffle, batch_size):
         while True:
             if shuffle:
                 random.shuffle(self.batches)
-
-            for path in self.batches:
-                batch = self.load_batch(path)
-                yield batch.x, batch.y
-                # for num in range(0, batch.size):
-                #     yield batch.get(num)
+                for path in self.batches:
+                    batch = self.load_batch(path)
+                    for x, y in batch.split(batch_size):
+                        yield x, y
 
     @classmethod
     def load(cls, path):
