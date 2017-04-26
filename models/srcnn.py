@@ -3,14 +3,15 @@ from __future__ import absolute_import
 from .base import BaseSuperResolutionModel
 from keras.layers import Convolution2D, Dropout
 from keras.models import Model
-from keras.optimizers import Adam, RMSprop
+from keras.optimizers import Adam, RMSprop, Adagrad, SGD
 from keras.objectives import mean_squared_error, mean_squared_logarithmic_error, mean_absolute_error
 from objectives import PSNRLoss
+import numpy as np
 
 
 class ImageSuperResolutionModel(BaseSuperResolutionModel):
 
-    def __init__(self, scale_factor, f1=9, f2=1, f3=5, n1=64, n2=32, optimizer=Adam, lr=1e-3, loss=mean_squared_logarithmic_error):
+    def __init__(self, scale_factor, f1=9, f2=1, f3=5, n1=64, n2=32, optimizer=SGD, lr=1e-3, loss=mean_squared_logarithmic_error, dropout=None):
         super(ImageSuperResolutionModel, self).__init__("srcnn", scale_factor)
 
         self.f1 = f1
@@ -22,6 +23,7 @@ class ImageSuperResolutionModel(BaseSuperResolutionModel):
         self.optimizer = optimizer
         self.lr = lr
         self.loss = loss
+        self.dropout = dropout
 
     def create_model(self, height=None, width=None, load_weights=False):
         """

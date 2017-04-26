@@ -127,9 +127,9 @@ class ImageScaleDataSet(DataSet):
             name=name, patch=patch_size, scale=scale_factor, image_dim_ordering=image_dim_ordering)
         self.config['scale_factor'] = scale_factor
         self.config['patch_size'] = patch_size
-        self.config['stride'] = patch_size / scale_factor
+        self.config['stride'] = patch_size / scale_factor / 2
         self.config['true_upscale'] = true_upscale
         self.config['image_dim_ordering'] = image_dim_ordering
 
         super(ImageScaleDataSet, self).create(
-            name=name, output_dir=output_dir, source_dir=source_dir, batch_size=512)
+            name=name, output_dir=output_dir, source_dir=source_dir, batch_size=64)

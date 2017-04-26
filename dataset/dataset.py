@@ -99,18 +99,20 @@ class DataSet(object):
                         yield x, y
 
     @classmethod
-    def load(cls, path):
+    def load(cls, path, verbose=False):
         path = os.path.expanduser(path)
         config_path = os.path.join(path, "config.pkl")
 
-        print("Load dataset: {}".format(path))
+        if verbose:
+            print("Load dataset: {}".format(path))
+
         data_set = cls()
         data_set.dir = path
 
         with open(config_path) as config_file:
             data_set.config = cPickle.load(config_file)
-
-        data_set.print_config()
+        if verbose:
+            data_set.print_config()
         return data_set
 
     def create(self, name, output_dir, source_dir, batch_size):
