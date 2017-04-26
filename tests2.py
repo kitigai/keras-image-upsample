@@ -10,7 +10,7 @@ if __name__ == "__main__":
     path = r""
     val_path = "val_images/"
 
-    scale = 10
+    scale = 2
 
     """
     Plot the models
@@ -38,16 +38,16 @@ if __name__ == "__main__":
     Train Super Resolution
     """
 
-    # train_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-train_grid-tf")
-    # validation_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-validation_small-tf")
+    train_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-train_grid-tf")
+    validation_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-validation_small-tf")
 
-    train_dataset = ImageScaleDataSet.load("~/datasets/image-x10-patch160-train_small-tf")
-    validation_dataset = ImageScaleDataSet.load("~/datasets/image-x10-patch160-validation_small-tf")
+    # train_dataset = ImageScaleDataSet.load("~/datasets/image-x10-patch160-train_small-tf")
+    # validation_dataset = ImageScaleDataSet.load("~/datasets/image-x10-patch160-validation_small-tf")
 
 
-    # sr = models.ImageSuperResolutionModel(scale, n2=256)
-    # sr.create_model()
-    # sr.fit(nb_epochs=50, train_dataset=train_dataset, validation_dataset=validation_dataset, verbose=1)
+    sr = models.ImageSuperResolutionModel(scale)
+    sr.create_model()
+    sr.fit(nb_epochs=50, train_dataset=train_dataset, validation_dataset=validation_dataset, verbose=1, batch_size=2)
 
 
     """
@@ -62,9 +62,9 @@ if __name__ == "__main__":
     Train DenoisingAutoEncoderSR
     """
 
-    dsr = models.DenoisingAutoEncoderSR(scale)
-    dsr.create_model()
-    dsr.fit(nb_epochs=50, train_dataset=train_dataset, validation_dataset=validation_dataset, verbose=1, batch_size=8)
+    # dsr = models.DenoisingAutoEncoderSR(scale)
+    # dsr.create_model()
+    # dsr.fit(nb_epochs=50, train_dataset=train_dataset, validation_dataset=validation_dataset, verbose=1, batch_size=8)
 
     """
     Train Deep Denoise SR
