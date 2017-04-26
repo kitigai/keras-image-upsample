@@ -31,12 +31,13 @@ class ImageSuperResolutionModel(BaseSuperResolutionModel):
         init = super(ImageSuperResolutionModel, self).create_model(
             height=height, width=width, load_weights=load_weights)
 
-        x = Convolution2D(self.n1, self.f1, self.f1, activation='relu', border_mode='same', name='level1')(init)
-        x = Convolution2D(self.n2, self.f2, self.f2, activation='relu', border_mode='same', name='level2')(x)
+        x = Convolution2D(filters=self.n1, kernel_size=(self.f1, self.f1), activation='relu', name='level1', padding='same')(init)
+        x = Convolution2D(filters=self.n2, kernel_size=(self.f2, self.f2), activation='relu', name='level2', padding='same')(x)
 
-        out = Convolution2D(self.channels, self.f3, self.f3, border_mode='same', name='output')(x)
+        out = Convolution2D(self.channels, kernel_size=(self.f3, self.f3), name='output', padding='same')(x)
 
         model = Model(init, out)
+        model.summary()
 
         model.compile(optimizer=self.optimizer(lr=self.lr), loss=self.loss, metrics=[PSNRLoss])
         if load_weights:
