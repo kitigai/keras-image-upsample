@@ -6,9 +6,13 @@ import json
 from keras.callbacks import History
 from keras.optimizers import Adam, Nadam, RMSprop, Adamax, Adadelta, Adagrad, SGD
 from tabulate import tabulate
+from dataset import ImageScaleDataSet
+import numpy as np
+import random
+
 
 def create_srcnn(**kwargs):
-    model = ImageSuperResolutionModel(scale_factor=2, **kwargs)
+    model = ImageSuperResolutionModel(**kwargs)
     model.create_model()
     return model
 
@@ -18,17 +22,16 @@ class GridExperiment(object):
 
 
 class GridSearch(object):
-    def __init__(self, build_fn, nb_epochs, train_data_set, validation_data_set, grid_params, search_metric, batch_sizes):
+    seed = 27
+    def __init__(self, build_fn, nb_epochs, train_data_set_path, validation_data_set_path, grid_params, search_metric, batch_sizes):
         self.build_fn = build_fn
         self.nb_epochs = nb_epochs
         self.grid_params = grid_params
-        self.train_data_set = train_data_set
-        self.validation_data_set = validation_data_set
+        self.train_data_set_path = train_data_set_path
+        self.validation_data_set_path = validation_data_set_path
         self.search_metric = search_metric
         self.batch_sizes = batch_sizes
 
-    # train_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-train_small-tf")
-    # validation_dataset = ImageScaleDataSet.load("~/datasets/image-x2-patch32-validation_small-tf")
 
     def run(self):
         keys = self.grid_params.keys()
@@ -45,13 +48,17 @@ class GridSearch(object):
         rows = []
         for batch_size in self.batch_sizes:
             for experiment_values in search_values:
+                np.random.seed(self.seed)
+                random.seed(self.seed)
                 kwargs = dict(zip(keys, experiment_values))
                 print("Execute experiment: {}/{}".format(experiment_num, len(search_values) * len(self.batch_sizes)))
                 print("Experiment params: batch_size:{}, {}".format(batch_size, kwargs))
                 model = self.build_fn(**kwargs)
+                train_data_set = ImageScaleDataSet.load(self.train_data_set_path)
+                validation_data_set = ImageScaleDataSet.load(self.validation_data_set_path)
                 history = model.fit(
-                    nb_epochs=self.nb_epochs, train_dataset=self.train_data_set,
-                    validation_dataset=self.validation_data_set, verbose=1, batch_size=batch_size)
+                    nb_epochs=self.nb_epochs, train_dataset=train_data_set,
+                    validation_dataset=validation_data_set, verbose=1, batch_size=batch_size)
 
                 best_metric_value = None
                 best_epoch = 0
@@ -90,24 +97,28 @@ class GridSearch(object):
                     best_experiment_num = experiment_num
 
                 print("Best experiment: {}".format(best_experiment_num))
-                print("Best experiment params: {}".format(json.dumps(rows[best_experiment_num], indent=4)))
+                print("Best experiment params: {}".format(rows[best_experiment_num], indent=4))
 
                 experiment_num += 1
 
-
         print(tabulate(tabular_data=rows, headers='keys', floatfmt='grid', disable_numparse=True))
 
-def experiment(train_data_set, validation_data_set):
 
-    gs = GridSearch(build_fn=create_srcnn, train_data_set=train_data_set, validation_data_set=validation_data_set,
+def experiment(train_data_set_path, validation_data_set_path):
+
+    gs = GridSearch(build_fn=create_srcnn,
+                    train_data_set_path=train_data_set_path,
+                    validation_data_set_path=validation_data_set_path,
                     grid_params={
+                        'scale_factor': [2],
                         # 'f1': [9],
                         # 'f2': [1],
                         # 'f3': [5],
-                        # 'n1': [32, 64],
-                        # 'n2': [32, 64, 128],
-                        # 'optimizer':
+                        # 'n1': [64, 128],
+                        # 'n2': [32, 64],
+                        'optimizer': [Adadelta],
+                        'lr': [0.5]
 
-                    }, nb_epochs=250, search_metric='val_PSNRLoss',
-                    batch_sizes=[2, 8, 32, 64])
+                    }, nb_epochs=500, search_metric='val_PSNRLoss',
+                    batch_sizes=[8])
     gs.run()

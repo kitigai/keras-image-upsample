@@ -49,9 +49,6 @@ class BaseSuperResolutionModel(object):
         #     assert height * img_utils._image_scale_multiplier % 4 == 0, "Height of the image must be divisible by 4"
         #     assert width * img_utils._image_scale_multiplier % 4 == 0, "Width of the image must be divisible by 4"
         #
-        np.random.seed(2727)
-
-
 
         if K.image_dim_ordering() == "th":
             shape = (self.channels, width, height)
